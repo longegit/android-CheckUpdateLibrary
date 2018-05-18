@@ -1,58 +1,139 @@
 package com.qiangxi.checkupdatelibrary;
 
+import android.os.Environment;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 
-import com.qiangxi.checkupdatelibrary.callback.CheckUpdateCallback;
-import com.qiangxi.checkupdatelibrary.callback.CheckUpdateCallback2;
-import com.qiangxi.checkupdatelibrary.http.HttpRequest;
+import com.qiangxi.checkupdatelibrary.dialog.CheckUpdateDialog;
+import com.qiangxi.checkupdatelibrary.imageloader.ImageLoader;
+import com.qiangxi.checkupdatelibrary.task.DownloadTask;
+import com.qiangxi.checkupdatelibrary.task.GetTask;
+import com.qiangxi.checkupdatelibrary.task.PostTask;
 
 import java.util.Map;
 
 /**
  * Created by qiang_xi on 2016/10/6 13:07.
- * 检查更新
+ * 检查更新入口类
  */
 
 public class Q {
+    public static String TAG_NAME = "checkUpdate";//log日志tag
+    public static boolean isDebug = false;//是否为debug模式，调试时设为true
 
-    public static final String GET = "GET";//GEI请求
-    public static final String POST = "POST";//POST请求
-
-    private Q() {
+    /**
+     * get请求
+     *
+     * @param url 请求地址
+     * @return get请求包装类
+     */
+    public static GetTask get(String url) {
+        return new GetTask(url);
     }
 
     /**
-     * 检查更新,,实体类中必须要有newAppVersionCode字段,不然检查不到更新
+     * get请求
      *
-     * @param requestMethod      请求方式:目前仅支持post或get
-     * @param currentVersionCode 当前应用版本号
-     * @param urlPath            请求地址
-     * @param params             请求参数,不需要传参时,置为null即可
-     * @param callback           请求回调
+     * @param url    请求地址
+     * @param params 附加参数
+     * @return get请求包装类
      */
-    public static void checkUpdate(@NonNull String requestMethod, @NonNull int currentVersionCode, @NonNull String urlPath, @Nullable Map<String, String> params, @NonNull CheckUpdateCallback callback) {
-        if (TextUtils.equals(requestMethod.toUpperCase(), "GET")) {
-            HttpRequest.get(currentVersionCode, urlPath, params, callback);
-        } else {
-            HttpRequest.post(currentVersionCode, urlPath, params, callback);
-        }
+    public static GetTask get(String url, Map<String, String> params) {
+        return new GetTask(url, params);
     }
 
     /**
-     * 检查更新,实体类可以任意自定义,不需要有newAppVersionCode字段,所以扩展性更强,但是需要自己进行是否有更新的判断
+     * post请求
      *
-     * @param requestMethod 请求方式:目前仅支持post或get
-     * @param urlPath       请求地址
-     * @param params        请求参数,不需要传参时,置为null即可
-     * @param callback      请求回调
+     * @param url 请求地址
+     * @return post请求包装类
      */
-    public static void checkUpdate(@NonNull String requestMethod, @NonNull String urlPath, @Nullable Map<String, String> params, @NonNull CheckUpdateCallback2 callback) {
-        if (TextUtils.equals(requestMethod.toUpperCase(), "GET")) {
-            HttpRequest.get(urlPath, params, callback);
-        } else {
-            HttpRequest.post(urlPath, params, callback);
+    public static PostTask post(String url) {
+        return new PostTask(url);
+    }
+
+    /**
+     * post请求
+     *
+     * @param url    请求地址
+     * @param params 附加参数
+     * @return post请求包装类
+     */
+    public static PostTask post(String url, Map<String, String> params) {
+        return new PostTask(url, params);
+    }
+
+    /**
+     * 下载任务
+     *
+     * @param url      下载地址
+     * @param filePath apk存储路径
+     * @param fileName apk存储名称
+     * @return 下载任务包装类
+     */
+    public static DownloadTask download(String url, String filePath, String fileName) {
+        if (TextUtils.isEmpty(filePath)) {
+            filePath = Environment.getExternalStorageDirectory().getPath();
         }
+        if (TextUtils.isEmpty(fileName)) {
+            filePath = "checkUpdate.apk";
+        }
+        return new DownloadTask(url, filePath, fileName);
+    }
+
+    /**
+     * 在使用lib自带的CheckUpdateDialog时，可使用该方法展示一个dialogFragment
+     *
+     * @param context must be FragmentActivity
+     * @param option  the CheckUpdateOption,用于设置lib自带的CheckUpdateDialog的一些属性
+     * @return CheckUpdateDialog
+     */
+    public static CheckUpdateDialog show(FragmentActivity context, CheckUpdateOption option) {
+        FragmentManager manager = context.getSupportFragmentManager();
+        CheckUpdateDialog dialog = new CheckUpdateDialog();
+        dialog.applyOption(option);
+        dialog.show(manager, "CheckUpdateDialog");
+        return dialog;
+    }
+
+    /**
+     * 在使用lib自带的CheckUpdateDialog时，可使用该方法展示一个dialogFragment
+     *
+     * @param context must be FragmentActivity
+     * @param option  the CheckUpdateOption,用于设置lib自带的CheckUpdateDialog的一些属性
+     * @param loader  从网络加载图片的imageLoader,从本地加载图片的话，可不用ImageLoader
+     * @return CheckUpdateDialog
+     */
+    public static CheckUpdateDialog show(FragmentActivity context, CheckUpdateOption option, ImageLoader loader) {
+        FragmentManager manager = context.getSupportFragmentManager();
+        CheckUpdateDialog dialog = new CheckUpdateDialog();
+        dialog.applyOption(option);
+        dialog.setImageLoader(loader);
+        dialog.show(manager, "CheckUpdateDialog");
+        return dialog;
+    }
+
+    /**
+     * 用于设置debug模式以及tag标签,debug模式下会打印log
+     * 在application类中初始化
+     *
+     * @param tag   过滤log时的标签名
+     * @param debug 是否为debug模式，在测试时为true，发布时为false【默认为false，即不打log】
+     */
+    public static void debug(@NonNull String tag, boolean debug) {
+        TAG_NAME = tag;
+        isDebug = debug;
+    }
+
+    /**
+     * 用于设置debug模式以及tag标签,debug模式下会打印log
+     * 在application类中初始化
+     *
+     * @param debug 是否为debug模式，在测试时为true，发布时为false【默认为false，即不打log】
+     */
+    public static void debug(boolean debug) {
+        isDebug = debug;
     }
 }

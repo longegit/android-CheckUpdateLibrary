@@ -15,27 +15,28 @@ package com.qiangxi.checkupdatelibrary.callback;
  * limitations under the License.
  */
 
-import java.io.File;
-
 /**
  * Created by qiangxi(任强强) on 2017/9/25.<p>
- * Download回调 所有回调接口全部被分发到了主线程，可以放心使用
+ * 基类回调接口，所有回调接口全部被分发到了主线程，可以放心使用
  * </p>
  */
-public interface DownloadCallback extends BaseCallback {
+
+public interface BaseCallback {
     /**
-     * 下载进度的回调，每隔1s回调一次
-     *
-     * @param currentLength 当前下载的字节数
-     * @param totalLength   apk的总字节数
+     * 开始检查更新或开始下载更新
      */
-    void downloadProgress(long currentLength, long totalLength);
+    void checkUpdateStart();
 
     /**
-     * 下载成功的回调
+     * 检查更新失败或下载更新失败
      *
-     * @param apk 下载的apk文件，可在此回调中调用安装apk方法进行安装
+     * @param t 把Throwable返回，并且内部也打印了log，方便开发时调试，
      */
-    void downloadSuccess(File apk);
+    void checkUpdateFailure(Throwable t);
+
+    /**
+     * 检查更新结束或下载更新结束
+     */
+    void checkUpdateFinish();
 
 }

@@ -8,14 +8,8 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="forceUpdateDialogClick"
-        android:text="强制更新dialog"
+        android:onClick="updateDialogClick"
+        android:text="更新dialog"
         android:textAllCaps="false" />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="UpdateDialogClick"
-        android:text="非强制更新dialog"
-        android:textAllCaps="false" />
 </LinearLayout>

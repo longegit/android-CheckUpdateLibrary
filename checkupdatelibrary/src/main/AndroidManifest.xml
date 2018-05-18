@@ -1,3 +1,22 @@
-<manifest package="com.qiangxi.checkupdatelibrary"
-         >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.qiangxi.checkupdatelibrary">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <application>
+
+        <provider
+            android:name=".provider.CheckUpdateProvider"
+            android:authorities="${applicationId}.provider.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/apk_uri_grant"/>
+        </provider>
+
+        <service android:name=".service.DownloadService" />
+    </application>
+
 </manifest>

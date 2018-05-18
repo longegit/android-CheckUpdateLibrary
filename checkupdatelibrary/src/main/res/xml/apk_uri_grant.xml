@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <paths>
+        <external-path
+            name="checkupdate"
+            path=""/>
+        <files-path
+            name="checkupdate"
+            path=""/>
+        <cache-path
+            name="checkupdate"
+            path=""/>
+        <root-path
+            name="checkupdate"
+            path=""/>
+    </paths>
+</resources>
