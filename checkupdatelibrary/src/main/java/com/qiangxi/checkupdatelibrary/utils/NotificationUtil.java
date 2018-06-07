@@ -1,12 +1,15 @@
 package com.qiangxi.checkupdatelibrary.utils;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.Settings;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.FileProvider;
 
@@ -20,6 +23,8 @@ import static android.app.PendingIntent.getActivity;
 
 public class NotificationUtil {
     private static final int notificationId = 0;
+    private static final String channelID = "check_update_id";
+    private static final String channelName = "check_update_name";
 
     private NotificationUtil() {
     }
@@ -51,6 +56,12 @@ public class NotificationUtil {
         builder.setAutoCancel(false).setShowWhen(true).setSmallIcon(notificationIconResId).setContentTitle(notificationTitle).setContentText(notificationContent);
         PendingIntent pendingIntent = getActivity(context, 0, installIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_HIGH);
+            channel.enableLights(true);
+            manager.createNotificationChannel(channel);
+            builder.setChannelId(channelID);
+        }
         Notification notification = builder.build();// 获取一个Notification
         notification.defaults = Notification.DEFAULT_SOUND;// 设置为默认的声音
         notification.flags = isCanClear ? Notification.FLAG_ONLY_ALERT_ONCE : Notification.FLAG_ONLY_ALERT_ONCE | Notification.FLAG_NO_CLEAR;
@@ -72,6 +83,12 @@ public class NotificationUtil {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setAutoCancel(false).setShowWhen(false).setSmallIcon(notificationIconResId).setContentTitle(notificationTitle)
                 .setProgress(totalProgress, currentProgress, false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_HIGH);
+            channel.enableLights(true);
+            manager.createNotificationChannel(channel);
+            builder.setChannelId(channelID);
+        }
         Notification notification = builder.build();// 获取一个Notification
         notification.defaults = Notification.DEFAULT_SOUND;// 设置为默认的声音
         notification.flags = isCanClear ? Notification.FLAG_ONLY_ALERT_ONCE : Notification.FLAG_ONLY_ALERT_ONCE | Notification.FLAG_NO_CLEAR;
@@ -95,9 +112,23 @@ public class NotificationUtil {
                 .setContentTitle(notificationTitle).setContentText(notificationContent);
         PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(channelID, channelName, NotificationManager.IMPORTANCE_HIGH);
+            channel.enableLights(true);
+            manager.createNotificationChannel(channel);
+            builder.setChannelId(channelID);
+        }
         Notification notification = builder.build();// 获取一个Notification
         notification.defaults = Notification.DEFAULT_SOUND;// 设置为默认的声音
         notification.flags = isCanClear ? Notification.FLAG_ONLY_ALERT_ONCE : Notification.FLAG_ONLY_ALERT_ONCE | Notification.FLAG_NO_CLEAR;
         manager.notify(notificationId, notification);// 显示通知
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private static void startInstallPermissionSettingActivity(Context context) {
+        //注意这个是8.0新API
+        Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
     }
 }
