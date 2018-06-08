@@ -8,8 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import android.provider.Settings;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.FileProvider;
 
@@ -122,13 +120,5 @@ public class NotificationUtil {
         notification.defaults = Notification.DEFAULT_SOUND;// 设置为默认的声音
         notification.flags = isCanClear ? Notification.FLAG_ONLY_ALERT_ONCE : Notification.FLAG_ONLY_ALERT_ONCE | Notification.FLAG_NO_CLEAR;
         manager.notify(notificationId, notification);// 显示通知
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private static void startInstallPermissionSettingActivity(Context context) {
-        //注意这个是8.0新API
-        Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
     }
 }

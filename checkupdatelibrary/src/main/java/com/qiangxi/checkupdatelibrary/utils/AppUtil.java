@@ -36,16 +36,6 @@ public class AppUtil {
      *            apk文件路径
      */
     public static void installApk(Context context, File file) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            boolean hasInstallPermission = context.getPackageManager().canRequestPackageInstalls();
-            if (!hasInstallPermission) {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
-                return;
-            }
-        }
-
         Intent intent = new Intent();
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setAction(Intent.ACTION_VIEW);
