@@ -9,8 +9,9 @@
     <ImageView
         android:id="@+id/check_update_image"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_100"
-        android:src="@android:color/holo_blue_dark"/>
+        android:layout_height="@dimen/dp_120"
+        android:scaleType="fitXY"
+        android:src="@drawable/checkupdate_ic_dialog_top"/>
 
     <TextView
         android:id="@+id/check_update_version_code"
