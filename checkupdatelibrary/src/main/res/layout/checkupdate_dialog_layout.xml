@@ -48,7 +48,7 @@
         android:paddingLeft="@dimen/dp_20"
         android:paddingRight="@dimen/dp_20"
         android:paddingTop="@dimen/dp_10"
-        android:text="更新日志："
+        android:text="@string/cul_update_log"
         android:textColor="@color/text_color_01"
         android:textSize="@dimen/sp_16"/>
 
@@ -97,7 +97,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/str_not_update"
+            android:text="@string/cul_not_update"
             android:textColor="@color/text_color_04"
             android:textSize="@dimen/sp_16"
             app:contentDrawable="@drawable/shape_tv_bg"
@@ -115,7 +115,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/str_update"
+            android:text="@string/cul_update"
             android:textColor="@color/text_color_03"
             android:textSize="@dimen/sp_16"
             app:contentDrawable="@drawable/shape_tv_bg"

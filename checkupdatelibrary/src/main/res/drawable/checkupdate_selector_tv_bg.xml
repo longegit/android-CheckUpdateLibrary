@@ -3,7 +3,7 @@
     <item android:drawable="@drawable/shape_tv_bg" android:state_pressed="false"/>
     <item android:state_pressed="true">
         <shape>
-            <solid android:color="@color/text_color_04"/>
+            <solid android:color="@color/checkupdate_text_color_04"/>
         </shape>
     </item>
 </selector>
