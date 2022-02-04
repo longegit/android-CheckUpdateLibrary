@@ -13,7 +13,7 @@
         <!-- 背景模糊 -->
         <item name="android:backgroundDimEnabled">true</item>
         <!--背景样式-->
-        <item name="android:windowBackground">@drawable/shape_dialog_bg</item>
+        <item name="android:windowBackground">@drawable/checkupdate_shape_dialog_bg</item>
         <!-- 点击空白消失 -->
         <item name="android:windowCloseOnTouchOutside">false</item>
         <!--全屏-->

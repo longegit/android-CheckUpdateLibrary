@@ -118,7 +118,7 @@ class InternalDialog extends Dialog implements DownloadCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View layout = LayoutInflater.from(getContext())
-                .inflate(R.layout.dialog_check_update_layout, null);
+                .inflate(R.layout.checkupdate_dialog_layout, null);
         setContentView(layout);
         initView();
         initEvent();
@@ -207,17 +207,17 @@ class InternalDialog extends Dialog implements DownloadCallback {
         }
         if (mOption.isForceUpdate()) {
             setCancelable(false);
-            checkUpdateNegative.setText("退出应用");
+            checkUpdateNegative.setText(R.string.checkupdate_exit_app);
         }
         if (TextUtils.isEmpty(mOption.getNewAppVersionName())) {
             checkUpdateVersionCode.setVisibility(View.GONE);
         } else {
-            checkUpdateVersionCode.setText("版本号：" + mOption.getNewAppVersionName());
+            checkUpdateVersionCode.setText(mActivity.getString(R.string.checkupdate_version) + mOption.getNewAppVersionName());
         }
         if (mOption.getNewAppSize() == 0) {
             checkUpdateVersionSize.setVisibility(View.GONE);
         } else {
-            checkUpdateVersionSize.setText("新版大小：" + mOption.getNewAppSize() + "M");
+            checkUpdateVersionSize.setText(mActivity.getString(R.string.checkupdate_version_size) + mOption.getNewAppSize() + "M");
         }
         if (TextUtils.isEmpty(mOption.getNewAppUpdateDesc())) {
             checkUpdateVersionLog.setVisibility(View.GONE);
@@ -234,13 +234,13 @@ class InternalDialog extends Dialog implements DownloadCallback {
 
     @Override
     public void checkUpdateStart() {
-        checkUpdatePositive.setText("正在下载...");
+        checkUpdatePositive.setText(R.string.checkupdate_downloading);
     }
 
     @Override
     public void checkUpdateFailure(Throwable t) {
         L.e(t);
-        checkUpdatePositive.setText("下载失败");
+        checkUpdatePositive.setText(R.string.checkupdate_download_failed);
         checkUpdatePositive.setClickable(true);
     }
 
@@ -259,7 +259,7 @@ class InternalDialog extends Dialog implements DownloadCallback {
     @Override
     public void downloadSuccess(File apk) {
         mApk = apk;
-        checkUpdatePositive.setText("点击安装");
+        checkUpdatePositive.setText(R.string.checkupdate_click_install);
         isDownloadComplete = true;
         checkUpdatePositive.setClickable(true);
         AppUtil.installApk(getContext(), apk);
