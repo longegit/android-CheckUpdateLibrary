@@ -9,7 +9,7 @@
 
         <provider
             android:name=".provider.CheckUpdateProvider"
-            android:authorities="${applicationId}.provider.FileProvider"
+            android:authorities="${applicationId}.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

@@ -42,7 +42,7 @@ public class AppUtil {
         Uri uri;
         //当前设备系统版本在7.0以上
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            uri = FileProvider.getUriForFile(context, context.getPackageName()+".provider.FileProvider", file);
+            uri = FileProvider.getUriForFile(context, context.getPackageName()+".fileProvider", file);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         } else {
             uri = Uri.fromFile(file);
