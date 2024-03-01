@@ -184,7 +184,11 @@ class InternalDialog extends Dialog implements DownloadCallback {
         } else {
             Intent intent = new Intent(mActivity, DownloadService.class);
             intent.putExtra("CheckUpdateOption", mOption);
-            getContext().startService(intent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                getContext().startForegroundService(intent);
+            } else {
+                getContext().startService(intent);
+            }
             dismiss();
         }
     }
