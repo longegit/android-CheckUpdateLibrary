@@ -1,12 +1,9 @@
 package com.qiangxi.checkupdatelibrary.service;
 
-import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
-import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
 
 import com.qiangxi.checkupdatelibrary.CheckUpdateOption;
 import com.qiangxi.checkupdatelibrary.Q;
@@ -52,15 +49,6 @@ public class DownloadService extends Service implements DownloadCallback {
         mOption = intent.getParcelableExtra("CheckUpdateOption");
         Q.download(mOption.getNewAppUrl(), mOption.getFilePath(), mOption.getFileName())
                 .callback(this).execute();
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        builder.setAutoCancel(false).setShowWhen(false).setSmallIcon(mOption.getNotificationIconResId())
-                .setContentTitle(mOption.getNotificationTitle())
-                .setContentText("");
-        Notification notification = builder.build();
-        notification.defaults = Notification.DEFAULT_SOUND; //设置为默认的声音
-        startForeground(110, notification);// 开始前台服务
-
         return START_STICKY;
     }
 
@@ -73,11 +61,7 @@ public class DownloadService extends Service implements DownloadCallback {
     public void checkUpdateFailure(Throwable t) {
         Intent intent = new Intent(this, DownloadService.class);
         intent.putExtra("CheckUpdateOption", mOption);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(intent);
-        } else {
-            startService(intent);
-        }
+        startService(intent);
         NotificationUtil.showDownloadFailureNotification(this, intent, mOption.getNotificationIconResId(),
                 mOption.getNotificationTitle(), mOption.getNotificationFailureContent(), true);
     }
